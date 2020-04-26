@@ -10,6 +10,6 @@ else
 {
 	$outputstring  = 'yes';
 	fwrite($fp, $outputstring);
-	echo "Message inserted";
+	echo "Success";
 }
 ?>

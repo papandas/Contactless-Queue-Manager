@@ -4,14 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Client</title>
 </head>
-<script type='text/javascript' src='./js/jquery.js'></script>
+<script type='text/javascript' src='./assets/js/jquery.js'></script>
 <style>
 .centered {
   position: fixed;
   top: 50%;
   left: 50%;
   margin-top: -250px;
-  margin-left: -200px;
+  margin-left: -250px;
 }
 .imageFull {
     position: fixed;
@@ -28,17 +28,20 @@
 
 <body>
 <div id="wait" class="centered">
-	<img src="wait.png" width="500" height="500"/>
+	<img src="./assets/images/wait.png" width="500" height="500"/>
 </div>
 <div id="walk" class="centered">
-	<img src="walk.png" width="500" height="500"/>
+	<img src="./assets/images/walk.png" width="500" height="500"/>
 </div>
+<audio id="walkMp3" src="./assets/sound/walk.mp3" autoplay="false" ></audio>
+<audio id="waitMp3" src="./assets/sound/wait.mp3" autoplay="false" ></audio>
 </body>
 <script type='text/javascript'>
 var myVar;
 var count=0;
+var isWaitPlayed=false;
 
-function myFunction() {
+function myFunction() {		  
 	document.getElementById("walk").style.display = "none";
 					document.getElementById("wait").style.display = "block";
   	myVar = setInterval(alertFunc, 1000);
@@ -49,7 +52,7 @@ function alertFunc() {
 	if(count == 0){
 		$.ajax({
  			type: "POST",
- 			url: "read.php",
+ 			url: "./assets/php/read.php",
  			data: "",
  			success: function(msg){
      			console.log(msg);
@@ -57,9 +60,21 @@ function alertFunc() {
 		 			count = 1;
 					document.getElementById("walk").style.display = "block";
 					document.getElementById("wait").style.display = "none";
+					
+					var sound = document.getElementById("walkMp3");
+    				sound.play();
+					
+					isWaitPlayed=false
+					
 	 			}else{
 		 			document.getElementById("walk").style.display = "none";
 					document.getElementById("wait").style.display = "block";
+					
+					if(!isWaitPlayed){
+						var sound = document.getElementById("waitMp3");
+						sound.play();
+						isWaitPlayed=true
+					}
 	 			}
  			},
  			error: function(XMLHttpRequest, textStatus, errorThrown) {
